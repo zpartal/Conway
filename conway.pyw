@@ -1,8 +1,15 @@
-# Conway Game of Life
-# Zachary Partal
-# Python 3.3 and PyGame 1.9.2
-# May 27, 2013
-# Version 1.0.0
+'''
+Conway Game of Life
+Zachary Partal
+Python 3.3 and PyGame 1.9.2
+May 27, 2013
+Version 1.0.0
+Instructions:
+Click on cells in the grid to mark them as alive
+Press enter to start/stop the simulation
+Press 'c' when the simulation is stopped to clear the grid
+Press n when the simulation is stopped to advance the simulation by one generation
+'''
 
 import pygame, random, sys, math
 from pygame.locals import *
