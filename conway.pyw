@@ -1,5 +1,8 @@
 # Conway Game of Life
 # Zachary Partal
+# Python 3.3 and PyGame 1.9.2
+# May 27, 2013
+# Version 1.0.0
 
 import pygame, random, sys, math
 from pygame.locals import *
