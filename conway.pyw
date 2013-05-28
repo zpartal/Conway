@@ -31,16 +31,13 @@ BGCOLOR = WHITE
 
 
 class Cell:
-    pos_x = 0  # horizontal cell grid position
-    pos_y = 0  # vertical cell grid position
-    state = 0  # 1 for alive, 0 for dead
-
     def __init__(self, x, y):
         self.pos_x = x  # horizontal cell grid position
         self.pos_y = y  # vertical cell grid position
+        self.state = 0  # 1 for alive, 0 for dead
 
-    def print_cell(self):
-        print("[" + str(self.pos_x) + "," + str(self.pos_y) + "] State: " + str(self.state))
+    def __str__(self):
+        return "[" + str(self.pos_x) + "," + str(self.pos_y) + "] State: " + str(self.state)
 
     def kill(self):
         self.state = 0
@@ -48,7 +45,7 @@ class Cell:
     def live(self):
         self.state = 1
 
-    def isAlive(self):
+    def is_alive(self):
         if self.state == 1:
             return True
         else:
@@ -56,12 +53,9 @@ class Cell:
 
 
 class CellBoard:
-    cell_table = []
-    next_state = []
-    width = 0
-    height = 0
-
     def __init__(self, _width, _height):
+        self.cell_table = []
+        self.next_state = []
         self.width = _width
         self.height = _height
         for x in range(self.width):
@@ -86,7 +80,7 @@ class CellBoard:
                 elif _x+x >= self.width or _y+y >= self.height: pass
                 elif _x+x < 0 or _y+y < 0: pass
                 else:
-                    if self.cell_table[_x+x][_y+y].isAlive():
+                    if self.cell_table[_x+x][_y+y].is_alive():
                         neighbor_count += 1
         return neighbor_count
 
@@ -96,7 +90,7 @@ class CellBoard:
         # Any live cell with more than three live neighbors dies, as if by overcrowding.
         # Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
         live_neighbors = self.num_neighbors(_x, _y)
-        if self.cell_table[_x][_y].isAlive():
+        if self.cell_table[_x][_y].is_alive():
             if live_neighbors < 2:
                 self.next_state[_x][_y].kill()
             elif live_neighbors > 3:
@@ -110,12 +104,9 @@ class CellBoard:
                 self.next_state[_x][_y].kill()
 
     def deep_copy_states(self):
-        for x in range(self.width):
-            for y in range(self.height):
-                if self.next_state[x][y].isAlive():
-                    self.cell_table[x][y].live()
-                else:
-                    self.cell_table[x][y].kill()
+        for current_column, next_column in zip(self.cell_table, self.next_state):
+            for cell, next_cell in zip(current_column, next_column):
+                cell.state = next_cell.state
 
     def generate_next_state(self):
         for x in range(self.width):
@@ -184,9 +175,9 @@ def runGame():
 
 
 def click_cell(_mouse_x, _mouse_y):
-    gridx = math.floor(_mouse_x / CELLSIZE)
-    gridy = math.floor(_mouse_y / CELLSIZE)
-    if game_board.cell(gridx, gridy).isAlive():
+    gridx = _mouse_x // CELLSIZE
+    gridy = _mouse_y // CELLSIZE
+    if game_board.cell(gridx, gridy).is_alive():
         game_board.cell(gridx, gridy).kill()
     else:
         game_board.cell(gridx, gridy).live()
@@ -203,7 +194,7 @@ def drawGrid():
 def drawCells():
     for x in range(GRIDWIDTH):
         for y in range(GRIDHEIGHT):
-            if game_board.cell(x, y).isAlive():
+            if game_board.cell(x, y).is_alive():
                 rect_coords = pygame.Rect(x*CELLSIZE, y*CELLSIZE, CELLSIZE, CELLSIZE)
                 pygame.draw.rect(DISPLAYSURF, BLACK, rect_coords)
 
