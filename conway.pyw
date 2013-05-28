@@ -68,9 +68,9 @@ class CellBoard:
             self.next_state.append(n_new_column)
 
     def clear_cell_table(self):
-        for x in range(self.width):
-            for y in range(self.height):
-                self.cell_table[x][y].kill()
+        for column in self.cell_table:
+            for cell in column:
+                cell.kill()
 
     def num_neighbors(self, _x, _y):
         neighbor_count = 0
